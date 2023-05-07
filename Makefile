@@ -11,13 +11,10 @@ $(addprefix $(BUILD_DIR)/,$(addsuffix .o,$(basename $(1))))
 endef
 
 src = $(addprefix src/,\
-  alien.cpp \
-  life.cpp \
   main.cpp \
-  rocket.cpp \
-  spaceship.cpp \
-  score.cpp \
 )
+
+LIBS = -lm
 
 CPPFLAGS = -std=c++11 -fno-exceptions
 CPPFLAGS += -Os -Wall
@@ -53,11 +50,11 @@ $(BUILD_DIR)/%.bin: $(BUILD_DIR)/%.nwa
 
 $(BUILD_DIR)/voord.nwa: $(call object_for,$(src)) $(BUILD_DIR)/icon.o
 	@echo "LD      $@"
-	$(Q) $(CC) $(CPPFLAGS) $(LDFLAGS) $^ -o $@
+	$(Q) $(CC) $(CPPFLAGS) $(LDFLAGS) $^ $(LIBS) -o $@
 
 $(addprefix $(BUILD_DIR)/,%.o): %.cpp | $(BUILD_DIR)
 	@echo "CXX     $^"
-	$(Q) $(CXX) $(CPPFLAGS) $(SFLAGS) -c $^ -o $@
+	$(Q) $(CXX) $(CPPFLAGS) $(SFLAGS) -c $^ $(LIBS) -o $@
 
 $(BUILD_DIR)/icon.o: src/icon.png
 	@echo "ICON    $<"
